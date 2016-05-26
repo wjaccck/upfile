@@ -1,3 +1,4 @@
+https://github.com/ervilis/django-rest-framework-cache/
 #coding=utf8
 from flask import Flask,request,jsonify
 from base import Client,Key,get_result
