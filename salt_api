@@ -1,0 +1,49 @@
+#coding=utf8
+from flask import Flask,request,jsonify
+from base import Client,Key,get_result
+from werkzeug.contrib.fixers import ProxyFix
+app = Flask(__name__)
+
+
+@app.route('/cmd',methods=['POST'])
+def cmd():
+    token=request.headers.get('token')
+    if token != 'ae9fdfee94c7c9e782dce222e172465f':
+        result=get_result(1,'wrong token')
+    else:
+        info=request.get_json()
+        result=Client().cmd(info)
+    return jsonify(result)
+
+@app.route('/key/accept',methods=['POST'])
+def key_accept():
+    token=request.headers.get('token')
+    if token != 'ae9fdfee94c7c9e782dce222e172465f':
+        result=get_result(1,'wrong token')
+    else:
+        info=request.get_json()
+        result=Key().accept(info)
+    return jsonify(result)
+
+@app.route('/key/delete',methods=['POST'])
+def key_delete():
+    token=request.headers.get('token')
+    if token != 'ae9fdfee94c7c9e782dce222e172465f':
+        result=get_result(1,'wrong token')
+    else:
+        info=request.get_json()
+        result = Key().delete(info)
+    return jsonify(result)
+
+@app.route('/key/all',methods=['GET'])
+def key_all():
+    token=request.headers.get('token')
+    if token != 'ae9fdfee94c7c9e782dce222e172465f':
+        result=get_result(1,'wrong token')
+    else:
+        result=Key().all()
+    return jsonify(result)
+
+app.wsgi_app = ProxyFix(app.wsgi_app)
+if __name__ == '__main__':
+    app.run()
